@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel da Organização — Copa Jovem Pan 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark">JP</span>
+      <span><b>Painel da organização</b><small>Copa Jovem Pan 2026</small></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="index.html">Site</a>
+      <a href="admin.html" class="on" aria-current="page">Painel da organização</a>
+      <a href="story.html">Story dos BONS DE BOLA</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" style="padding-bottom:70px">
+  <div class="page-head">
+    <span class="eyebrow">BONS DE BOLA · cadastro semanal</span>
+    <h1 class="display-title">Seleção dos destaques da rodada</h1>
+    <p class="lead" style="max-width:720px">Escolha a semana, cadastre os atletas com nome, escola, categoria e foto. O site e o story são atualizados na hora — sem depender de designer.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="field" style="min-width:220px">
+      <label for="semana">Semana em edição</label>
+      <select id="semana"></select>
+    </div>
+    <div>
+      <a class="btn brand" id="openStory" href="#">Abrir story da semana</a>
+      <a class="btn ghost" href="index.html">Ver no site</a>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    <form class="form" id="form" autocomplete="off">
+      <h3>Novo atleta</h3>
+
+      <div class="field" style="margin-bottom:12px">
+        <span class="fieldlabel">Foto do atleta</span>
+        <label class="drop" for="foto">
+          <strong>Enviar foto</strong>
+          JPG ou PNG · o sistema reduz e otimiza automaticamente
+          <input type="file" id="foto" accept="image/*" capture="environment" hidden>
+        </label>
+        <img class="preview" id="preview" alt="Pré-visualização da foto do atleta">
+        <button type="button" class="btn ghost sm" id="limparFoto" style="display:none;margin-top:8px">Remover foto</button>
+      </div>
+
+      <div class="field"><label for="nome">Nome do atleta</label><input type="text" id="nome" placeholder="Ex.: Antônio Carvalho" required></div>
+      <div class="field"><label for="escola">Colégio / Time</label><input type="text" id="escola" list="escolas" placeholder="Ex.: Instituto São José" required></div>
+      <datalist id="escolas"></datalist>
+
+      <div class="field"><label for="categoria">Categoria</label><select id="categoria"></select></div>
+      <div class="field"><label for="modalidade">Modalidade</label><select id="modalidade"></select></div>
+      <div class="field"><label for="posicao">Posição</label><input type="text" id="posicao" placeholder="Ex.: Ala, Goleiro, Atacante"></div>
+      <div class="field"><label for="gols">Gols na rodada</label><input type="number" id="gols" min="0" value="0"></div>
+      <div class="field"><label for="obs">Observação</label><input type="text" id="obs" placeholder="Ex.: decidiu o clássico no fim"></div>
+
+      <button type="submit" class="btn brand" style="width:100%;justify-content:center;margin-top:6px">Adicionar à semana</button>
+      <div class="btn-row">
+        <button type="button" class="btn ghost sm" id="restaurar">Restaurar exemplo</button>
+        <button type="button" class="btn ghost sm" id="exportar">Exportar JSON</button>
+      </div>
+    </form>
+
+    <div>
+      <div class="count">
+        <b id="contador">0</b>
+        <span>atletas na Semana <span id="semanaLabel"></span></span>
+        <span class="bar"><i id="barra"></i></span>
+        <span style="white-space:nowrap">meta ~10</span>
+      </div>
+      <div class="rows" id="lista" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:26px">
+    <b>Como isso entra na proposta:</b> este painel é a peça que a organização usa toda semana. Cada atleta cadastrado aparece automaticamente na galeria do site e entra no story 1080x1920 pronto para o Instagram — o mesmo layout do material que já é publicado hoje, só que gerado pelo sistema.
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <span>Protótipo demonstrativo · Copa Jovem Pan 2026</span>
+  <span>Proposta: michelmelo.pt</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/seed.js"></script>
+<script src="assets/bons.js"></script>
+<script>
+const el = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let semana = ultimaSemanaComDados(loadBons(), SEMANA_ATUAL);
+let foto = null;
+let dados = loadBons();
+
+function toast(msg){
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+el('semana').innerHTML = Array.from({length: TOTAL_SEMANAS}, (_, i) => i + 1)
+  .map(s => `<option value="${s}">Semana ${s}</option>`).join('');
+el('semana').value = String(semana);
+
+el('categoria').innerHTML = CATEGORIAS.map(c => `<option>${esc(c)}</option>`).join('');
+el('modalidade').innerHTML = MODALIDADES.map(m => `<option>${esc(m)}</option>`).join('');
+el('escolas').innerHTML = ESCOLAS.map(e => `<option value="${esc(e)}"></option>`).join('');
+
+function render(){
+  el('semanaLabel').textContent = semana;
+  el('openStory').href = 'story.html?semana=' + semana;
+
+  const lista = getWeekBons(dados, semana);
+  el('contador').textContent = lista.length;
+  el('barra').style.width = Math.min(100, (lista.length / 10) * 100) + '%';
+
+  el('lista').innerHTML = lista.length ? lista.map((a, i) => `<div class="row-item">
+    <div class="avatar">${a.foto ? `<img src="${a.foto}" alt="">` : initials(a.nome)}</div>
+    <div>
+      <div class="nm">${esc(a.nome)}</div>
+      <div class="sub">${esc(a.escola)} · ${esc(a.categoria)} · ${esc(a.modalidade || '')}${a.gols ? ' · ' + a.gols + ' gol(s)' : ''}</div>
+    </div>
+    <button class="icon-btn" data-rem="${i}" title="Remover">✕</button>
+  </div>`).join('') : `<div class="empty">Ninguém cadastrado nesta semana ainda.</div>`;
+
+  el('lista').querySelectorAll('[data-rem]').forEach(b => {
+    b.addEventListener('click', () => {
+      const l = getWeekBons(dados, semana);
+      l.splice(Number(b.dataset.rem), 1);
+      setWeekBons(dados, semana, l);
+      render();
+      toast('Atleta removido');
+    });
+  });
+}
+
+function downscale(file, cb){
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const max = 700;
+    let w = img.naturalWidth, h = img.naturalHeight;
+    const s = Math.min(1, max / Math.max(w, h));
+    w = Math.round(w * s); h = Math.round(h * s);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    cb(c.toDataURL('image/jpeg', 0.82));
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast('Não foi possível ler a imagem'); };
+  img.src = url;
+}
+
+el('foto').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
+  downscale(f, dataUrl => {
+    foto = dataUrl;
+    el('preview').src = dataUrl;
+    el('preview').style.display = 'block';
+    el('limparFoto').style.display = 'inline-flex';
+  });
+});
+
+el('limparFoto').addEventListener('click', () => {
+  foto = null;
+  el('foto').value = '';
+  el('preview').style.display = 'none';
+  el('limparFoto').style.display = 'none';
+});
+
+el('semana').addEventListener('change', e => {
+  semana = Number(e.target.value);
+  render();
+});
+
+el('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const nome = el('nome').value.trim();
+  const escola = el('escola').value.trim();
+  if(!nome || !escola){ toast('Preencha nome e escola'); return; }
+
+  const lista = getWeekBons(dados, semana);
+  lista.push({
+    nome,
+    escola,
+    categoria: el('categoria').value,
+    modalidade: el('modalidade').value,
+    posicao: el('posicao').value.trim(),
+    gols: Number(el('gols').value) || 0,
+    obs: el('obs').value.trim(),
+    foto
+  });
+  setWeekBons(dados, semana, lista);
+
+  el('form').reset();
+  foto = null;
+  el('preview').style.display = 'none';
+  el('limparFoto').style.display = 'none';
+  el('categoria').value = CATEGORIAS[2];
+  el('gols').value = '0';
+  render();
+  toast('Adicionado aos BONS DE BOLA');
+});
+
+el('restaurar').addEventListener('click', () => {
+  dados = resetBons();
+  render();
+  toast('Dados de exemplo restaurados');
+});
+
+el('exportar').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(dados, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bons-de-bola-copa-jovem-pan.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('JSON exportado');
+});
+
+el('categoria').value = CATEGORIAS[2];
+render();
+</script>
+</body>
+</html>

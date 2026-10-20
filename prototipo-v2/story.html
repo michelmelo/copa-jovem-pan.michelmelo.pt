@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story dos BONS DE BOLA — Copa Jovem Pan 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="toprule"><i></i></div>
+
+<header class="masthead" style="border-bottom:1px solid var(--line)">
+  <div class="wrap mast-in" style="padding:16px 0 14px">
+    <a class="wordmark" href="index.html" aria-label="Voltar ao site da Copa">
+      <span class="jp" aria-hidden="true">JP</span>
+      <span>
+        <b>Story dos BONS DE BOLA</b>
+        <small>Peça 1080 x 1920 · pronta para postar</small>
+      </span>
+    </a>
+    <div class="edition">Gerado pelo sistema<br><b>sem designer</b></div>
+  </div>
+  <nav class="navline" aria-label="Navegação principal">
+    <div class="wrap navline-in">
+      <a href="index.html">Site público</a>
+      <a href="admin.html">Painel da organização</a>
+      <a href="story.html" class="on" aria-current="page">Story dos BONS DE BOLA</a>
+    </div>
+  </nav>
+</header>
+
+<div class="stage">
+  <div class="bar-top">
+    <div class="field" style="min-width:170px">
+      <label for="semana">Semana</label>
+      <select id="semana"></select>
+    </div>
+    <div class="field" style="min-width:130px">
+      <label for="pagina">Peça</label>
+      <select id="pagina"></select>
+    </div>
+    <div>
+      <button class="btn line sm" id="prev">Anterior</button>
+      <button class="btn line sm" id="next">Próxima</button>
+    </div>
+  </div>
+
+  <div class="frame">
+    <canvas id="cv" width="1080" height="1920" role="img" aria-label="Pré-visualização do story dos BONS DE BOLA"></canvas>
+  </div>
+
+  <div class="bar-top">
+    <button class="btn solid" id="baixar">Baixar PNG</button>
+    <a class="btn line" href="admin.html">Editar no painel</a>
+    <a class="btn line" href="index.html">Ver no site</a>
+  </div>
+
+  <p class="hint">A peça é gerada a partir dos atletas cadastrados no painel — nome, colégio, categoria e foto. A comissão cadastra os dados e clica em baixar. Cada peça leva até 4 atletas, então uma semana de 10 atletas gera 3 peças.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/seed.js"></script>
+<script src="assets/bons.js"></script>
+<script>
+const el = id => document.getElementById(id);
+const cv = el('cv');
+const ctx = cv.getContext('2d');
+const W = 1080, H = 1920;
+
+const C = { bg:'#0D0D0D', brand:'#D1151B', brandHi:'#F91622', white:'#FFFFFF', muted:'#9A9AA2' };
+
+let semana = Number(new URLSearchParams(location.search).get('semana')) || ultimaSemanaComDados(loadBons(), SEMANA_ATUAL);
+let pagina = 0, slides = [], cache = {};
+
+function toast(msg){
+  const t = el('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+function rr(x, y, w, h, r){
+  const [tl, tr, br, bl] = Array.isArray(r) ? r : [r, r, r, r];
+  ctx.beginPath();
+  ctx.moveTo(x + tl, y);
+  ctx.lineTo(x + w - tr, y); ctx.quadraticCurveTo(x + w, y, x + w, y + tr);
+  ctx.lineTo(x + w, y + h - br); ctx.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+  ctx.lineTo(x + bl, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - bl);
+  ctx.lineTo(x, y + tl); ctx.quadraticCurveTo(x, y, x + tl, y);
+  ctx.closePath();
+}
+function spaced(text, x, y, gap){
+  try{ ctx.letterSpacing = gap + 'px'; }catch(e){}
+  ctx.fillText(text, x, y);
+  try{ ctx.letterSpacing = '0px'; }catch(e){}
+}
+function fitFont(text, font, weight, maxSize, maxWidth){
+  let size = maxSize;
+  do {
+    ctx.font = `${weight} ${size}px ${font}`;
+    if(ctx.measureText(text).width <= maxWidth) break;
+    size -= 2;
+  } while(size > 20);
+  return size;
+}
+function cover(img, x, y, w, h, r){
+  const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+  const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+  ctx.save(); rr(x, y, w, h, r); ctx.clip();
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+  ctx.restore();
+}
+function crown(cx, cy, s){
+  ctx.beginPath();
+  ctx.moveTo(cx - s, cy + s * 0.5);
+  ctx.lineTo(cx - s, cy - s * 0.35);
+  ctx.lineTo(cx - s * 0.45, cy + s * 0.12);
+  ctx.lineTo(cx, cy - s * 0.7);
+  ctx.lineTo(cx + s * 0.45, cy + s * 0.12);
+  ctx.lineTo(cx + s, cy - s * 0.35);
+  ctx.lineTo(cx + s, cy + s * 0.5);
+  ctx.closePath(); ctx.fill();
+  ctx.fillRect(cx - s, cy + s * 0.62, s * 2, s * 0.3);
+}
+
+function background(){
+  /* fundo plano + diagonais nítidas (sem degradê suave) */
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.globalAlpha = 0.06;
+  ctx.strokeStyle = C.brand;
+  ctx.lineWidth = 30;
+  for(let i = -6; i < 20; i++){
+    ctx.beginPath();
+    ctx.moveTo(i * 132, -120);
+    ctx.lineTo(i * 132 - 360, H + 120);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  ctx.fillStyle = C.brand;
+  ctx.fillRect(0, 0, W, 16);
+}
+
+function header(total){
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.brand;
+  ctx.font = '800 30px Archivo, sans-serif';
+  spaced('COPA JOVEM PAN DE FUTSAL ESCOLAR', W / 2, 110, 7);
+
+  const size = fitFont('BONS DE BOLA', 'Archivo, sans-serif', '900', 176, W - 140);
+  ctx.font = `900 ${size}px Archivo, sans-serif`;
+  ctx.fillStyle = C.white;
+  ctx.fillText('BONS DE BOLA', W / 2, 300);
+
+  ctx.textAlign = 'left';
+  const pillText = 'SEMANA ' + String(semana).padStart(2, '0');
+  ctx.font = '800 40px Archivo, sans-serif';
+  const pw = ctx.measureText(pillText).width + 76;
+  const px = (W - pw) / 2, py = 378, ph = 84;
+  ctx.fillStyle = C.brand;
+  rr(px, py, pw, ph, ph / 2); ctx.fill();
+  ctx.fillStyle = C.white; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  spaced(pillText, W / 2, py + ph / 2 + 2, 3);
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.textAlign = 'right';
+  ctx.font = '800 26px Archivo, sans-serif';
+  ctx.fillStyle = C.muted;
+  ctx.fillText(`${pagina + 1} / ${total}`, W - 68, py + ph / 2 + 9);
+
+  ctx.strokeStyle = 'rgba(209,21,27,.75)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(120, 524); ctx.lineTo(W - 120, 524); ctx.stroke();
+}
+
+function card(a, x, y, w, h){
+  const photoH = h - 116;
+  const img = cache[a._key];
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 14;
+  ctx.fillStyle = '#1C1C1F';
+  rr(x, y, w, h, 18); ctx.fill();
+  ctx.restore();
+
+  if(img){
+    cover(img, x, y, w, photoH, [18, 18, 0, 0]);
+  }else{
+    ctx.save(); rr(x, y, w, photoH, [18, 18, 0, 0]); ctx.clip();
+    ctx.fillStyle = '#26262A'; ctx.fillRect(x, y, w, photoH);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,.20)';
+    ctx.font = '900 150px Archivo, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(initials(a.nome), x + w / 2, y + photoH / 2);
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  const r = 34;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 12;
+  ctx.fillStyle = C.brand;
+  ctx.beginPath(); ctx.arc(x + w - 44, y + 44, r, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = '#fff';
+  crown(x + w - 44, y + 44, 14);
+
+  ctx.fillStyle = C.brand;
+  ctx.fillRect(x, y + photoH, w, 64);
+
+  const nmSize = fitFont(a.nome.toUpperCase(), 'Archivo, sans-serif', '800', 46, w - 30);
+  ctx.font = `800 ${nmSize}px Archivo, sans-serif`;
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(a.nome.toUpperCase(), x + w / 2, y + photoH + 34);
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.fillStyle = '#fff';
+  rr(x, y + photoH + 64, w, 52, [0, 0, 18, 18]); ctx.fill();
+
+  ctx.textAlign = 'left';
+  ctx.font = '700 24px "Source Sans 3", sans-serif';
+  ctx.fillStyle = '#0D0D0D';
+  let s = `${a.escola.toUpperCase()} · ${a.categoria}`;
+  while(ctx.measureText(s).width > w - 130 && s.length > 6) s = s.slice(0, -2);
+  ctx.fillText(s, x + 20, y + photoH + 99);
+
+  if(a.gols > 0){
+    ctx.textAlign = 'right';
+    ctx.font = '800 26px Archivo, sans-serif';
+    ctx.fillStyle = '#0D0D0D';
+    ctx.fillText(`${a.gols} ${a.gols > 1 ? 'GOLS' : 'GOL'}`, x + w - 20, y + photoH + 99);
+  }
+}
+
+function footer(){
+  const x = 68, y = 1712, w = W - 136, h = 112;
+  ctx.fillStyle = '#fff'; rr(x, y, w, h, 16); ctx.fill();
+
+  ctx.textAlign = 'left';
+  ctx.font = '800 19px Archivo, sans-serif';
+  ctx.fillStyle = '#6E6E76';
+  spaced('REALIZAÇÃO E PATROCÍNIO', x + 22, y + 30, 3);
+
+  const n = 5, bw = 158, gap = (w - 44 - n * bw) / (n - 1);
+  for(let i = 0; i < n; i++){
+    const bx = x + 22 + i * (bw + gap);
+    ctx.fillStyle = '#F2F2F4'; rr(bx, y + 46, bw, 46, 8); ctx.fill();
+    ctx.strokeStyle = '#DCDCE0'; ctx.lineWidth = 2; rr(bx, y + 46, bw, 46, 8); ctx.stroke();
+    ctx.fillStyle = '#9A9AA2'; ctx.font = '800 20px Archivo, sans-serif';
+    ctx.textAlign = 'center'; ctx.fillText('LOGO', bx + bw / 2, y + 76);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.font = '700 22px "Source Sans 3", sans-serif';
+  ctx.fillStyle = C.muted;
+  spaced('@COPAJOVEMPAN · #BONSDEBOLA', W / 2, 1884, 4);
+
+  ctx.fillStyle = C.brand;
+  ctx.fillRect(0, H - 12, W, 12);
+}
+
+function chunk(list, n){
+  const out = [];
+  for(let i = 0; i < list.length; i += n) out.push(list.slice(i, i + n));
+  return out;
+}
+async function preload(items){
+  return Promise.all(items.map(a => new Promise(res => {
+    if(!a.foto){ cache[a._key] = null; return res(); }
+    const img = new Image();
+    img.onload = () => { cache[a._key] = img; res(); };
+    img.onerror = () => { cache[a._key] = null; res(); };
+    img.src = a.foto;
+  })));
+}
+
+async function build(){
+  const data = loadBons();
+  const list = getWeekBons(data, semana).map((a, i) => ({...a, _key: 'a' + i}));
+  slides = chunk(list, 4);
+  if(!slides.length) slides = [[]];
+  if(pagina >= slides.length) pagina = slides.length - 1;
+
+  el('pagina').innerHTML = slides.map((_, i) =>
+    `<option value="${i}" ${i === pagina ? 'selected' : ''}>${i + 1} de ${slides.length}</option>`).join('');
+
+  await preload(list);
+  draw();
+}
+
+function draw(){
+  const items = slides[pagina] || [];
+  cv.setAttribute('aria-label',
+    `Pré-visualização do story dos BONS DE BOLA — Semana ${semana}, peça ${pagina + 1} de ${slides.length}, ${items.length} atleta(s).`);
+  ctx.clearRect(0, 0, W, H);
+  background();
+  header(slides.length);
+
+  if(!items.length){
+    ctx.textAlign = 'center';
+    ctx.fillStyle = C.white; ctx.font = '900 58px Archivo, sans-serif';
+    ctx.fillText('SEM ATLETAS NESTA SEMANA', W / 2, 900);
+    ctx.fillStyle = C.muted; ctx.font = '600 30px "Source Sans 3", sans-serif';
+    ctx.fillText('Cadastre os destaques no painel para gerar a peça.', W / 2, 960);
+    footer(); return;
+  }
+
+  const pad = 68, gap = 36, gridTop = 596, footerTop = 1690;
+  const cellW = (W - pad * 2 - gap) / 2;
+  const cellH = (footerTop - gridTop - gap) / 2;
+  const rows = Math.ceil(items.length / 2);
+  const offsetY = rows === 1 ? (cellH + gap) / 2 : 0;
+
+  items.forEach((a, i) => {
+    const row = Math.floor(i / 2);
+    let col = i % 2;
+    if(items.length === 1) col = 0;
+    const x = items.length === 1 ? pad + (cellW + gap) / 2 : pad + col * (cellW + gap);
+    const y = gridTop + offsetY + row * (cellH + gap);
+    card(a, x, y, cellW, cellH);
+  });
+  footer();
+}
+
+function baixar(){
+  cv.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `bons-de-bola-semana-${semana}-peca-${pagina + 1}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    toast('Peça baixada em PNG');
+  }, 'image/png');
+}
+
+el('semana').innerHTML = Array.from({length: TOTAL_SEMANAS}, (_, i) => i + 1)
+  .map(s => `<option value="${s}" ${s === semana ? 'selected' : ''}>Semana ${s}</option>`).join('');
+
+el('semana').addEventListener('change', e => { semana = Number(e.target.value); pagina = 0; history.replaceState(null, '', '?semana=' + semana); build(); });
+el('pagina').addEventListener('change', e => { pagina = Number(e.target.value); draw(); });
+el('prev').addEventListener('click', () => { pagina = Math.max(0, pagina - 1); build(); });
+el('next').addEventListener('click', () => { pagina = Math.min(slides.length - 1, pagina + 1); build(); });
+el('baixar').addEventListener('click', baixar);
+
+document.fonts.ready.then(() => {
+  Promise.all([
+    document.fonts.load('900 176px Archivo'),
+    document.fonts.load('800 30px Archivo')
+  ]).then(build).catch(build);
+});
+</script>
+</body>
+</html>

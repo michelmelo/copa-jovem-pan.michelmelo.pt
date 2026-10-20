@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposta — Copa Jovem Pan de Futsal Escolar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page{ size:A4; margin:16mm 15mm; }
+  :root{
+    --red:#C61D23; --red-2:#A3121A; --red-hi:#F91622;
+    --red-soft:rgba(198,29,35,.06); --red-line:rgba(198,29,35,.30);
+    --ink:#0E0E11; --body:#2B2B32; --muted:#6C6C76; --faint:#9A9AA3;
+    --line:#E6E6EC; --line-2:#F0F0F4; --soft:#F7F7FA; --white:#fff;
+    --font:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-d:'Manrope','Roboto',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{
+    margin:0;font-family:var(--font);color:var(--body);font-size:10.5pt;line-height:1.6;
+    background:#fff;-webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:190mm;margin:0 auto}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4,.d{font-family:var(--font-d);color:var(--ink)}
+  p{margin:0 0 3mm}
+  b,strong{color:var(--ink)}
+  .lead{color:var(--muted)}
+  ul{margin:0 0 3mm;padding-left:0;list-style:none}
+  li{position:relative;margin-bottom:1.6mm;padding-left:6mm}
+  li:before{content:'';position:absolute;left:.5mm;top:2.1mm;width:2.2mm;height:2.2mm;border-radius:2px;background:var(--red)}
+  li b{color:var(--ink)}
+
+  /* ---------- Capa ---------- */
+  .cover{
+    position:relative;overflow:hidden;border-radius:16px;color:#fff;
+    padding:13mm 13mm 10mm;margin:0 0 7mm;
+    background:#100F13;
+    box-shadow:0 22px 55px rgba(24,3,4,.28);
+  }
+  .cover:before{
+    content:'';position:absolute;inset:0;opacity:.5;
+    background-image:
+      linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+    background-size:9mm 9mm;
+  }
+  .cover:after{
+    content:'';position:absolute;top:0;right:0;width:86mm;height:86mm;
+    background:rgba(198,29,35,.20);
+    clip-path:polygon(100% 0,0 0,100% 100%);
+  }
+  .cover-head{display:flex;align-items:center;justify-content:space-between;gap:6mm;flex-wrap:wrap;position:relative;z-index:2}
+  .mark{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-d);font-weight:800;font-size:9.5pt;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:5px 12px}
+  .mark i{font-style:normal;background:var(--red);border-radius:5px;padding:2px 6px;font-weight:800;letter-spacing:.3px}
+  .cover-head .doc{font-family:var(--font-d);font-weight:800;font-size:8pt;letter-spacing:2.4px;text-transform:uppercase;color:#D5D5DB}
+  .cover h1{font-size:25pt;line-height:1.04;margin:8mm 0 4mm;position:relative;z-index:2;text-transform:uppercase;letter-spacing:-.3px;color:#fff}
+  .cover h1 em{font-style:normal;color:var(--red-hi)}
+  .cover .sub{margin:0;color:#CFCFD6;max-width:140mm;position:relative;z-index:2;font-size:10.5pt;line-height:1.62}
+  .cover-meta{display:flex;gap:9mm;margin-top:9mm;position:relative;z-index:2;flex-wrap:wrap}
+  .cover-meta div{border-left:2px solid var(--red-hi);padding-left:3.5mm}
+  .cover-meta b{display:block;font-family:var(--font-d);font-size:14pt;line-height:1.05;color:#fff}
+  .cover-meta span{font-size:7.8pt;letter-spacing:1.4px;text-transform:uppercase;color:#B7B7BF;font-weight:600}
+  .cover-foot{
+    display:flex;justify-content:space-between;gap:6mm;flex-wrap:wrap;position:relative;z-index:2;
+    margin-top:9mm;padding-top:4.5mm;border-top:1px solid rgba(255,255,255,.14);
+    font-size:8.3pt;color:#B7B7BF;
+  }
+  .cover-foot b{color:#fff}
+
+  /* ---------- Entregáveis ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm;margin:0 0 6mm}
+  .pillar{border:1px solid var(--line);border-radius:12px;padding:3.5mm;background:#fff;box-shadow:0 1px 2px rgba(16,16,20,.03)}
+  .pillar .pi{display:inline-grid;place-items:center;width:6mm;height:6mm;border-radius:7px;background:var(--red);color:#fff;font-family:var(--font-d);font-weight:800;font-size:8.4pt;margin-bottom:2mm}
+  .pillar b{display:block;font-family:var(--font-d);font-size:9.3pt;text-transform:uppercase;letter-spacing:.2px;line-height:1.15}
+  .pillar small{display:block;margin-top:1mm;font-size:8.4pt;color:var(--muted);line-height:1.45}
+
+  /* ---------- Sumário ---------- */
+  .toc{border:1px solid var(--line);border-radius:12px;padding:4mm 6mm;margin:0 0 7mm;background:var(--soft);break-inside:avoid}
+  .toc h2{margin:0 0 3mm;font-size:10pt;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted)}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 8mm}
+  .toc li{margin:0;padding:1.7mm 0;border-bottom:1px dotted #D5D5DC;display:flex;align-items:baseline;gap:3mm}
+  .toc li:before{display:none}
+  .toc li .tn{font-family:var(--font-d);font-weight:800;font-size:9pt;color:var(--red)}
+  .toc li a{flex:1;font-size:9.4pt;font-weight:500;color:var(--body)}
+
+  /* ---------- Seções ---------- */
+  .sec-head{display:flex;align-items:center;gap:4mm;margin:7.5mm 0 3.5mm;padding-bottom:2.2mm;border-bottom:2px solid var(--red)}
+  .sec-head:first-of-type{margin-top:0}
+  .sec-head .n{display:inline-grid;place-items:center;min-width:8mm;height:8mm;padding:0 2mm;border-radius:8px;background:var(--red);color:#fff;font-family:var(--font-d);font-weight:800;font-size:10pt;flex:none}
+  .sec-head h2{margin:0;font-size:13pt;text-transform:uppercase;letter-spacing:.3px}
+  .sec-head .sub{margin-left:auto;font-family:var(--font-d);font-size:8pt;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);font-weight:800}
+  h3{font-size:10.8pt;margin:6mm 0 2.2mm;display:flex;align-items:center;gap:2.6mm;text-transform:none}
+  .num{display:inline-grid;place-items:center;width:6.2mm;height:6.2mm;border-radius:50%;background:var(--red);color:#fff;font-family:var(--font-d);font-weight:800;font-size:8.6pt;flex:none}
+
+  /* ---------- Cards ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm}
+  .box{border:1px solid var(--line);border-radius:12px;padding:3.5mm 4mm;background:#fff;break-inside:avoid}
+  .box.on{background:var(--soft);border-color:var(--line-2)}
+  .box h4{margin:0 0 1.5mm;font-size:9.8pt;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:2.4mm}
+  .box p{margin:0;font-size:9.3pt;color:var(--muted);line-height:1.55}
+  .box h4 .num{width:5.6mm;height:5.6mm;font-size:8pt}
+
+  /* ---------- Tabelas ---------- */
+  table{width:100%;border-collapse:collapse;margin:0 0 4mm;font-size:9.4pt;break-inside:auto}
+  thead th{
+    background:var(--ink);color:#fff;font-family:var(--font-d);font-weight:800;font-size:7.8pt;
+    text-transform:uppercase;letter-spacing:.7px;text-align:left;padding:2.2mm 3mm;
+  }
+  tbody td{padding:2.2mm 3mm;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even) td{background:var(--soft)}
+  tbody tr:last-child td{border-bottom:1px solid var(--line)}
+  td b{color:var(--ink)}
+  td.c{text-align:center;white-space:nowrap}
+  tr{break-inside:avoid}
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5pt;
+    background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--ink);white-space:nowrap;
+  }
+
+  /* ---------- Nota ---------- */
+  .note{
+    border-left:3px solid var(--red);background:var(--red-soft);
+    border-radius:0 10px 10px 0;padding:3.5mm 4mm;font-size:9.3pt;margin:0 0 4mm;line-height:1.58;break-inside:avoid;
+  }
+  .note b{color:var(--ink)}
+
+  /* ---------- Passos ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+  .step{border:1px solid var(--line);border-radius:12px;padding:3.2mm;background:#fff;break-inside:avoid}
+  .step .s{display:inline-grid;place-items:center;width:7mm;height:7mm;border-radius:50%;background:var(--red-soft);border:1px solid var(--red-line);color:var(--red);font-family:var(--font-d);font-weight:800;font-size:9pt}
+  .step h4{margin:2.6mm 0 1mm;font-size:9.2pt;text-transform:uppercase;letter-spacing:.2px}
+  .step p{margin:0;font-size:8.6pt;color:var(--muted);line-height:1.5}
+
+  /* ---------- Investimento ---------- */
+  .price{
+    position:relative;overflow:hidden;border-radius:14px;padding:7mm;color:#fff;
+    background:#C61D23;
+    display:flex;align-items:center;justify-content:space-between;gap:6mm;
+    box-shadow:0 16px 40px rgba(198,29,35,.24);break-inside:avoid;
+  }
+  .price .lbl{font-family:var(--font-d);font-size:8.4pt;letter-spacing:2px;text-transform:uppercase;color:#FFD9DB;font-weight:800}
+  .price .val{font-family:var(--font-d);font-weight:800;font-size:30pt;line-height:1;letter-spacing:-.5px;margin-top:1mm}
+  .price .cond{font-size:8.5pt;color:#FFE1E3;max-width:74mm;text-align:right;line-height:1.5;position:relative;z-index:2}
+  .price .cond b{color:#fff}
+  .valid{font-size:8.3pt;color:var(--faint);margin:3mm 0 0;text-align:center}
+
+  /* ---------- Rodapé ---------- */
+  .foot{
+    margin-top:10mm;border-top:1px solid var(--line);padding-top:3mm;
+    font-size:8pt;color:var(--faint);display:flex;justify-content:space-between;gap:5mm;flex-wrap:wrap;
+  }
+
+  .avoid{break-inside:avoid}
+  .pb{break-before:page;page-break-before:always}
+  h2,h3{break-after:avoid;page-break-after:avoid}
+
+  @media screen{
+    body{background:#ECECEF;padding:11mm 0}
+    .page{background:#fff;max-width:208mm;padding:13mm 13mm 8mm;border-radius:8px;box-shadow:0 18px 60px rgba(16,16,20,.14)}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <section class="cover">
+    <div class="cover-head">
+      <span class="mark"><i>JP</i> Copa Jovem Pan de Futsal Escolar</span>
+      <span class="doc">Proposta comercial · 2026</span>
+    </div>
+    <h1>Plataforma oficial de<br>resultados, destaques<br>e <em>BONS DE BOLA</em></h1>
+    <p class="sub">Site público com a tabela de jogos e resultados das 5 categorias, painel para a organização lançar cada rodada, gerador automático do story semanal dos destaques e API para integrar tudo ao aplicativo da Jovem Pan.</p>
+    <div class="cover-meta">
+      <div><b>45 dias</b><span>Prazo de entrega</span></div>
+      <div><b>5 categorias</b><span>Sub-10 ao Sub-17 Feminino</span></div>
+      <div><b>16 colégios</b><span>e escolinhas da cidade</span></div>
+    </div>
+    <div class="cover-foot">
+      <span>Preparado para a organização da Copa · <b>São José dos Campos</b></span>
+      <span>por <b>michelmelo.pt</b> · outubro de 2026</span>
+    </div>
+  </section>
+
+  <div class="pillars">
+    <div class="pillar"><span class="pi">01</span><b>Site público</b><small>Jogos, resultados, classificação e destaques</small></div>
+    <div class="pillar"><span class="pi">02</span><b>Painel da organização</b><small>Lançamento de rodadas, fotos e destaques</small></div>
+    <div class="pillar"><span class="pi">03</span><b>Story automático</b><small>Peças 1080x1920 geradas sem designer</small></div>
+    <div class="pillar"><span class="pi">04</span><b>API para o app</b><small>Conteúdo da Copa dentro da Jovem Pan</small></div>
+  </div>
+
+  <nav class="toc">
+    <h2>Sumário</h2>
+    <ol>
+      <li><span class="tn">01</span><a href="#s1">O que o projeto resolve</a></li>
+      <li><span class="tn">02</span><a href="#s2">Escopo entregue</a></li>
+      <li><span class="tn">03</span><a href="#s3">Como fica a operação semanal</a></li>
+      <li><span class="tn">04</span><a href="#s4">Arquitetura e tecnologia</a></li>
+      <li><span class="tn">05</span><a href="#s5">Prazo — 45 dias</a></li>
+      <li><span class="tn">06</span><a href="#s6">O que precisamos da Jovem Pan</a></li>
+      <li><span class="tn">07</span><a href="#s7">Investimento</a></li>
+      <li><span class="tn">08</span><a href="#s8">Próximos passos</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <div class="sec-head"><span class="n">01</span><h2>O que o projeto resolve</h2><span class="sub">Contexto</span></div>
+    <p class="lead">Hoje a divulgação da Copa acontece em publicações manuais e os resultados ficam espalhados entre a organização, os colégios e as redes sociais. Não existe um lugar oficial que a família, o atleta e o colégio consultem — e nem uma fonte de dados que o aplicativo da rádio possa consumir.</p>
+    <p>Em uma única plataforma, o projeto resolve quatro frentes:</p>
+    <div class="grid">
+      <div class="box">
+        <h4><span class="num">1</span>Informação oficial</h4>
+        <p>Todos os jogos, resultados e a classificação de cada categoria em um endereço único, atualizado pela própria organização a cada rodada.</p>
+      </div>
+      <div class="box">
+        <h4><span class="num">2</span>Reconhecimento do atleta</h4>
+        <p>Artilharia, destaques da rodada e os BONS DE BOLA — com nome, colégio, categoria e foto — publicados toda semana, no site e nas redes.</p>
+      </div>
+      <div class="box">
+        <h4><span class="num">3</span>Conteúdo pronto para postar</h4>
+        <p>O story semanal dos destaques é gerado pelo sistema no formato 1080x1920, sem depender de designer nem de montagem manual.</p>
+      </div>
+      <div class="box">
+        <h4><span class="num">4</span>Fonte de dados para o app</h4>
+        <p>Uma API pública alimenta o aplicativo da Jovem Pan com jogos, placares, classificação e destaques — sem retrabalho de digitação.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><span class="n">02</span><h2>Escopo entregue</h2><span class="sub">Entregáveis</span></div>
+
+    <h3><span class="num">1</span>Site público</h3>
+    <table>
+      <thead><tr><th style="width:34%">Tela</th><th>O que mostra</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Jogos e resultados</b></td>
+          <td>Todos os jogos agrupados por categoria e por rodada, com data, horário, local, placar e situação (encerrado, ao vivo ou agendado). Filtros por semana, categoria, modalidade e colégio. Exportação de cada jogo para o calendário do celular.</td>
+        </tr>
+        <tr>
+          <td><b>Classificação</b></td>
+          <td>Tabela oficial por categoria com pontos, jogos, vitórias, empates, derrotas, gols pró, gols contra e saldo.</td>
+        </tr>
+        <tr>
+          <td><b>Artilharia</b></td>
+          <td>Ranking dos goleadores por categoria, com colégio e número de gols.</td>
+        </tr>
+        <tr>
+          <td><b>Destaques</b></td>
+          <td>Liderança de cada categoria, destaques da rodada e os números da competição (jogos, gols, maior goleada).</td>
+        </tr>
+        <tr>
+          <td><b>BONS DE BOLA</b></td>
+          <td>Galeria semanal com os atletas escolhidos: foto, nome, colégio, categoria e gols na rodada. Histórico de todas as semanas.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3><span class="num">2</span>Painel da organização</h3>
+    <p>Área restrita onde a comissão organizadora faz tudo sozinha, pelo celular ou computador:</p>
+    <ul>
+      <li><b>Cadastro de jogos e resultados</b> — por categoria, rodada, data, horário e local, com placar e situação do jogo.</li>
+      <li><b>Cadastro semanal dos BONS DE BOLA</b> — média de 10 atletas por semana, com nome, colégio, categoria, modalidade, posição, gols e <b>foto do atleta</b> (o sistema reduz e otimiza a imagem automaticamente).</li>
+      <li><b>Artilharia e destaques</b> — atualizados na mesma tela.</li>
+      <li><b>Publicação imediata</b> — o que é lançado aparece no site e no story na hora, sem etapa técnica.</li>
+    </ul>
+
+    <h3><span class="num">3</span>Gerador de story dos BONS DE BOLA</h3>
+    <p>O diferencial da entrega: em vez de alguém montar a arte no Canva toda semana, o sistema <b>gera a peça pronta</b> a partir dos dados já cadastrados.</p>
+    <ul>
+      <li>Formato vertical <b>1080 x 1920</b>, no padrão dos stories do Instagram.</li>
+      <li>Grade de atletas com nome, colégio, categoria e gols, dentro da identidade visual da Jovem Pan.</li>
+      <li>Uma semana de 10 atletas gera automaticamente 3 peças sequenciais — publicáveis em carrossel.</li>
+      <li>Download em PNG com um clique, pronto para postar.</li>
+      <li>Área de patrocinadores no rodapé, para levar as marcas que apoiam a Copa.</li>
+    </ul>
+
+    <h3><span class="num">4</span>API de integração com o aplicativo</h3>
+    <p>Esta é a parte que garante que o conteúdo da Copa apareça dentro do aplicativo da Jovem Pan sem ninguém digitar duas vezes.</p>
+    <div class="grid">
+      <div class="box on">
+        <h4>Como funciona</h4>
+        <p>O site e o painel passam a ser a fonte única de dados. O aplicativo consome a API e exibe jogos, placares, classificação e destaques com o mesmo conteúdo do site, atualizado no mesmo instante.</p>
+      </div>
+      <div class="box on">
+        <h4>Entrega técnica</h4>
+        <p>Documentação dos endpoints em português, chave de acesso para o time do aplicativo, ambiente de homologação e suporte na primeira integração.</p>
+      </div>
+    </div>
+    <p style="margin-top:4mm">Endpoints previstos na versão 1:</p>
+    <table>
+      <thead><tr><th style="width:42%">Endpoint</th><th>Conteúdo</th></tr></thead>
+      <tbody>
+        <tr><td><code>GET /v1/rodadas</code></td><td>Semanas/rodadas da competição e status de cada uma</td></tr>
+        <tr><td><code>GET /v1/jogos</code></td><td>Jogos com placar, data, local e situação — filtra por categoria, rodada, colégio e modalidade</td></tr>
+        <tr><td><code>GET /v1/classificacao</code></td><td>Tabela de classificação por categoria</td></tr>
+        <tr><td><code>GET /v1/artilharia</code></td><td>Ranking de goleadores por categoria</td></tr>
+        <tr><td><code>GET /v1/destaques</code></td><td>Destaques da rodada e liderança de cada categoria</td></tr>
+        <tr><td><code>GET /v1/bons-de-bola</code></td><td>Atletas homenageados por semana, com foto</td></tr>
+        <tr><td><code>GET /v1/categorias</code></td><td>Categorias, colégios e escolinhas participantes</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <b>Segurança e performance:</b> leitura pública com chave de aplicação, escrita restrita ao painel autenticado da organização, respostas em JSON com cache em CDN e webhook opcional para avisar o aplicativo quando sair um resultado ou um novo BONS DE BOLA.
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><span class="n">03</span><h2>Como fica a operação semanal</h2><span class="sub">Operação</span></div>
+    <div class="steps">
+      <div class="step"><span class="s">1</span><h4>Fim da rodada</h4><p>A comissão lança os placares de cada categoria no painel.</p></div>
+      <div class="step"><span class="s">2</span><h4>Escolha dos destaques</h4><p>Seleciona os ~10 BONS DE BOLA da semana e envia as fotos.</p></div>
+      <div class="step"><span class="s">3</span><h4>Story automático</h4><p>O sistema gera as peças 1080x1920 prontas para publicação.</p></div>
+      <div class="step"><span class="s">4</span><h4>Site e app atualizados</h4><p>Classificação, artilharia e galeria atualizadas na hora, e disponíveis na API.</p></div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><span class="n">04</span><h2>Arquitetura e tecnologia</h2><span class="sub">Tecnologia</span></div>
+    <table>
+      <thead><tr><th style="width:28%">Camada</th><th>Escolha</th></tr></thead>
+      <tbody>
+        <tr><td><b>Site público e painel</b></td><td>Aplicação web responsiva (celular e desktop), com carregamento rápido e leitura confortável em quadra.</td></tr>
+        <tr><td><b>API</b></td><td>REST em JSON, versionada em <code>/v1</code>, com chave de aplicação para o app e autenticação para o painel.</td></tr>
+        <tr><td><b>Dados</b></td><td>Banco de dados relacional com histórico completo das edições, atletas, jogos e resultados.</td></tr>
+        <tr><td><b>Imagens</b></td><td>Fotos dos atletas otimizadas e servidas por CDN.</td></tr>
+        <tr><td><b>Identidade</b></td><td>Paleta e tipografia da Jovem Pan (vermelho <code>#C61D23</code>, preto e branco), aplicadas no site e no story.</td></tr>
+        <tr><td><b>Hospedagem</b></td><td>Publicação em nuvem com HTTPS e domínio próprio, pronto para tráfego de pico nos dias de final.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><span class="n">05</span><h2>Prazo — 45 dias</h2><span class="sub">Cronograma</span></div>
+    <table>
+      <thead><tr><th style="width:12%">Etapa</th><th style="width:20%">Período</th><th>Entrega</th></tr></thead>
+      <tbody>
+        <tr><td class="c"><b>1</b></td><td class="c">Dias 1 a 7</td><td>Reunião de abertura, mapeamento das categorias, colégios e regulamento, e validação do protótipo visual.</td></tr>
+        <tr><td class="c"><b>2</b></td><td class="c">Dias 8 a 20</td><td>Site público completo (jogos, resultados, classificação, artilharia e destaques) e painel da organização.</td></tr>
+        <tr><td class="c"><b>3</b></td><td class="c">Dias 21 a 30</td><td>Módulo dos BONS DE BOLA, gerador de story 1080x1920 e API <code>/v1</code>.</td></tr>
+        <tr><td class="c"><b>4</b></td><td class="c">Dias 31 a 38</td><td>Integração com o aplicativo, testes com dados reais de uma rodada, ajustes e publicação em produção.</td></tr>
+        <tr><td class="c"><b>5</b></td><td class="c">Dias 39 a 45</td><td>Treinamento da equipe da rádio, manual de uso do painel e acompanhamento da primeira rodada oficial.</td></tr>
+      </tbody>
+    </table>
+    <p class="lead">O cronograma considera as informações de cadastro (colégios, categorias, calendário e regulamento) sendo enviadas pela Jovem Pan na primeira semana.</p>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><span class="n">06</span><h2>O que precisamos da Jovem Pan</h2><span class="sub">Pré-requisitos</span></div>
+    <ul>
+      <li>Lista oficial das categorias, colégios e escolinhas participantes da edição 2026.</li>
+      <li>Calendário das rodadas com datas, horários e locais dos jogos.</li>
+      <li>Regulamento da competição — critérios de desempate da classificação.</li>
+      <li>Logotipo e manual de marca, para aplicar a identidade no site e no story.</li>
+      <li>Contato do responsável técnico do aplicativo, para a integração via API.</li>
+    </ul>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><span class="n">07</span><h2>Investimento</h2><span class="sub">Proposta</span></div>
+    <div class="price">
+      <div>
+        <div class="lbl">Investimento total</div>
+        <div class="val">R$ 1.500,00</div>
+      </div>
+      <div class="cond"><b>Desenvolvimento, publicação e treinamento inclusos.</b><br>Hospedagem e domínio à parte, contratados em nome da Jovem Pan.</div>
+    </div>
+    <div class="grid" style="margin-top:4mm">
+      <div class="box">
+        <h4>Está incluso</h4>
+        <p>Site público, painel da organização, gerador de story, API para o aplicativo, publicação em produção, treinamento da equipe e suporte durante a primeira rodada.</p>
+      </div>
+      <div class="box">
+        <h4>Não está incluso</h4>
+        <p>Hospedagem e domínio, captação e tratamento das fotos dos atletas, produção de vídeo, e funcionalidades novas fora deste escopo (orçadas separadamente).</p>
+      </div>
+    </div>
+    <p class="valid">Proposta válida por 30 dias a partir da data de emissão.</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><span class="n">08</span><h2>Próximos passos</h2><span class="sub">Fechamento</span></div>
+    <div class="steps">
+      <div class="step"><span class="s">1</span><h4>Apresentação</h4><p>Revisão desta proposta e navegação pelo protótipo já disponível.</p></div>
+      <div class="step"><span class="s">2</span><h4>Aprovação</h4><p>Validação do escopo, do prazo e do investimento.</p></div>
+      <div class="step"><span class="s">3</span><h4>Início</h4><p>Reunião de abertura e envio das informações de cadastro.</p></div>
+      <div class="step"><span class="s">4</span><h4>Primeira rodada</h4><p>Site no ar junto com a abertura da Copa.</p></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>Proposta comercial · Copa Jovem Pan de Futsal Escolar · São José dos Campos</span>
+    <span>michelmelo.pt</span>
+  </div>
+
+</div>
+</body>
+</html>

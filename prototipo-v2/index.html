@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tabela oficial da Copa Jovem Pan de Futsal Escolar: resultados por categoria, classificação, artilharia, destaques e os BONS DE BOLA da rodada.">
+<title>Copa Jovem Pan de Futsal Escolar — resultados, classificação e BONS DE BOLA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="toprule"><i></i></div>
+
+<header class="masthead">
+  <div class="wrap mast-in">
+    <a class="wordmark" href="index.html" aria-label="Copa Jovem Pan de Futsal Escolar — início">
+      <span class="jp" aria-hidden="true">JP</span>
+      <span>
+        <b>Copa Jovem Pan</b>
+        <small>Futsal Escolar · edição 2026</small>
+      </span>
+    </a>
+    <div class="edition">
+      São José dos Campos · SP<br>
+      <b>16 colégios</b> · <b>5 categorias</b>
+    </div>
+  </div>
+  <nav class="navline" aria-label="Navegação principal">
+    <div class="wrap navline-in">
+      <a href="index.html" class="on" aria-current="page">Site público</a>
+      <a href="admin.html">Painel da organização</a>
+      <a href="story.html">Story dos BONS DE BOLA</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap page-open">
+    <span class="kicker">Copa Jovem Pan de Futsal Escolar</span>
+    <h1 class="headline">Resultados, classificação<br>e os <em>BONS DE BOLA</em></h1>
+    <p class="standfirst">Cinco categorias, dos Sub-10 ao Sub-17 Feminino, com os colégios e escolinhas da cidade. A tabela é atualizada pela própria organização a cada rodada — do placar ao story das redes.</p>
+  </section>
+
+  <section class="scoreboard" aria-label="Números da competição">
+    <div class="wrap scoreboard-in" id="stats"></div>
+  </section>
+
+  <div class="ribbon">
+    <div class="wrap ribbon-in" id="tabs" role="tablist" aria-label="Seções do site">
+      <button role="tab" id="tab-jogos" aria-controls="p-jogos" aria-selected="true" tabindex="0" data-tab="jogos" class="on">Jogos e resultados</button>
+      <button role="tab" id="tab-classificacao" aria-controls="p-classificacao" aria-selected="false" tabindex="-1" data-tab="classificacao">Classificação</button>
+      <button role="tab" id="tab-artilharia" aria-controls="p-artilharia" aria-selected="false" tabindex="-1" data-tab="artilharia">Artilharia</button>
+      <button role="tab" id="tab-destaques" aria-controls="p-destaques" aria-selected="false" tabindex="-1" data-tab="destaques">Destaques</button>
+      <button role="tab" id="tab-bons" aria-controls="p-bons" aria-selected="false" tabindex="-1" data-tab="bons">BONS DE BOLA</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="panel on" id="p-jogos" role="tabpanel" aria-labelledby="tab-jogos" tabindex="0">
+      <div class="filters">
+        <div class="field"><label for="fSemana">Semana</label><select id="fSemana"></select></div>
+        <div class="field"><label for="fCategoria">Categoria</label><select id="fCategoria"></select></div>
+        <div class="field"><label for="fModalidade">Modalidade</label><select id="fModalidade"></select></div>
+        <div class="field"><label for="fEscola">Colégio / Time</label><select id="fEscola"></select></div>
+      </div>
+      <div id="gamesOut" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="p-classificacao" role="tabpanel" aria-labelledby="tab-classificacao" tabindex="0">
+      <div class="filters" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="field"><label for="cCategoria">Categoria</label><select id="cCategoria"></select></div>
+        <div class="field"><label for="cModalidade">Modalidade</label><select id="cModalidade"></select></div>
+      </div>
+      <div class="tablewrap" id="standingsOut" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="p-artilharia" role="tabpanel" aria-labelledby="tab-artilharia" tabindex="0">
+      <div class="filters" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="field"><label for="aCategoria">Categoria</label><select id="aCategoria"></select></div>
+        <div class="field"><label for="aModalidade">Modalidade</label><select id="aModalidade"></select></div>
+      </div>
+      <div id="topsOut" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="p-destaques" role="tabpanel" aria-labelledby="tab-destaques" tabindex="0">
+      <h2 class="block-title" style="margin-top:30px">Liderança por categoria <small>parcial após a rodada</small></h2>
+      <div class="champs" id="champsOut"></div>
+      <h2 class="block-title">Destaques da rodada <small>quem brilhou na semana</small></h2>
+      <div class="highlights" id="highOut"></div>
+      <h2 class="block-title">Números da copa</h2>
+      <div class="scoreboard" style="margin-bottom:40px"><div class="scoreboard-in" id="numsOut"></div></div>
+    </section>
+
+    <section class="panel" id="p-bons" role="tabpanel" aria-labelledby="tab-bons" tabindex="0">
+      <div class="note" style="margin-top:26px">
+        <b>BONS DE BOLA da rodada.</b> Toda semana a organização cadastra os destaques no painel — nome, colégio, categoria e foto. O sistema monta o story para as redes e publica a galeria aqui. Média de 10 atletas por semana.
+      </div>
+      <div class="flow">
+        <div class="step"><i>1</i><h4>Apuração</h4><p>A comissão escolhe os destaques de cada categoria.</p></div>
+        <div class="step"><i>2</i><h4>Cadastro</h4><p>Nome, colégio, categoria, modalidade e foto do atleta.</p></div>
+        <div class="step"><i>3</i><h4>Story automático</h4><p>Peça 1080x1920 pronta para postar, sem designer.</p></div>
+        <div class="step"><i>4</i><h4>Publicação</h4><p>Galeria no site e material entregue para as escolas.</p></div>
+      </div>
+      <h2 class="block-title">Galeria por semana</h2>
+      <div class="weekpick" id="weekPick" role="group" aria-label="Semana da galeria"></div>
+      <div class="btn-row" style="margin-bottom:22px">
+        <a class="btn solid" id="openStory" href="#">Abrir story da semana</a>
+        <a class="btn line" href="admin.html">Cadastrar no painel</a>
+      </div>
+      <div class="bons-grid" id="bonsOut" aria-live="polite"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="foot wrap">
+  <span>Protótipo demonstrativo · <b>Copa Jovem Pan 2026</b> · dados ilustrativos para apresentação</span>
+  <span>Proposta: michelmelo.pt</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/seed.js"></script>
+<script src="assets/bons.js"></script>
+<script>
+const el = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function dataCurta(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m-1, d));
+  return `${dias[dt.getUTCDay()]} ${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}`;
+}
+function options(select, list, todas){
+  select.innerHTML = (todas ? `<option value="">${todas}</option>` : '') +
+    list.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+}
+function icsForGame(j){
+  const [y,mo,da] = j.data.split('-');
+  const [h,mi] = j.hora.split(':').map(Number);
+  const p = n => String(n).padStart(2,'0');
+  const start = `${y}${mo}${da}T${p(h)}${p(mi)}00`;
+  const end = `${y}${mo}${da}T${p((h+1)%24)}${p(mi)}00`;
+  const txt = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Copa Jovem Pan//PT-BR','BEGIN:VEVENT',
+    `UID:copa-jp-${j.id}@copajovempan`,`DTSTART:${start}`,`DTEND:${end}`,
+    `SUMMARY:${j.casa} x ${j.fora} — ${j.categoria} ${j.modalidade}`,
+    `LOCATION:${j.local}`,'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(txt);
+}
+
+/* ---- Abas (WAI-ARIA) ---- */
+const tabButtons = Array.from(document.querySelectorAll('#tabs [role="tab"]'));
+function activateTab(name, focus){
+  const btn = tabButtons.find(b => b.dataset.tab === name) || tabButtons[0];
+  tabButtons.forEach(b => {
+    const on = b === btn;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+    b.tabIndex = on ? 0 : -1;
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  const panel = el('p-' + btn.dataset.tab);
+  if(panel) panel.classList.add('on');
+  if(focus) btn.focus();
+  try{ history.replaceState(null, '', '?tab=' + btn.dataset.tab); }catch(e){}
+}
+tabButtons.forEach((b, i) => {
+  b.addEventListener('click', () => activateTab(b.dataset.tab));
+  b.addEventListener('keydown', e => {
+    let j = null;
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % tabButtons.length;
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + tabButtons.length) % tabButtons.length;
+    else if(e.key === 'Home') j = 0;
+    else if(e.key === 'End') j = tabButtons.length - 1;
+    if(j !== null){ e.preventDefault(); activateTab(tabButtons[j].dataset.tab, true); }
+  });
+});
+const requestedTab = new URLSearchParams(location.search).get('tab') || location.hash.replace('#','');
+if(requestedTab && tabButtons.some(b => b.dataset.tab === requestedTab)) activateTab(requestedTab);
+
+const resumo = computeResumo(JOGOS);
+el('stats').innerHTML = [
+  ['Colégios e times', resumo.escolas],
+  ['Categorias', resumo.categorias],
+  ['Jogos na tabela', resumo.total],
+  ['Gols marcados', resumo.gols]
+].map(([label, val], i) => `<div class="cell${i===3?' accent':''}"><b>${val}</b><span>${label}</span></div>`).join('');
+
+options(el('fSemana'), Array.from({length: TOTAL_SEMANAS}, (_, i) => 'Semana ' + (i+1)));
+options(el('fCategoria'), CATEGORIAS, 'Todas as categorias');
+options(el('fModalidade'), MODALIDADES, 'Todas as modalidades');
+options(el('fEscola'), ESCOLAS, 'Todos os colégios / times');
+options(el('cCategoria'), CATEGORIAS);
+options(el('cModalidade'), MODALIDADES);
+options(el('aCategoria'), CATEGORIAS, 'Todas as categorias');
+options(el('aModalidade'), MODALIDADES, 'Todas as modalidades');
+el('fSemana').value = 'Semana ' + SEMANA_ATUAL;
+
+function match(j){
+  const agendado = j.status === 'agendado';
+  const casaWin = !agendado && j.golsCasa > j.golsFora;
+  const foraWin = !agendado && j.golsFora > j.golsCasa;
+  const stage = j.status === 'ao_vivo'
+    ? '<span class="status on"><span class="dot"></span>ao vivo</span>'
+    : (agendado ? '<span class="status sched"><span class="dot"></span>agendado</span>'
+                : '<span class="status"><span class="dot"></span>encerrado</span>');
+  return `<article class="match">
+    <div class="rail"><b>${esc(j.hora)}</b><span>${dataCurta(j.data)} · ${esc(j.local)}</span></div>
+    <div class="teams">
+      <div class="team ${casaWin ? 'win' : (foraWin ? 'lose' : '')}"><span class="nm">${esc(j.casa)}</span><span class="sc">${agendado ? '–' : j.golsCasa}</span></div>
+      <div class="team ${foraWin ? 'win' : (casaWin ? 'lose' : '')}"><span class="nm">${esc(j.fora)}</span><span class="sc">${agendado ? '–' : j.golsFora}</span></div>
+    </div>
+    ${stage}
+  </article>`;
+}
+
+function renderGames(){
+  const semana = Number(el('fSemana').value.replace(/\D/g, '')) || SEMANA_ATUAL;
+  const cat = el('fCategoria').value;
+  const mod = el('fModalidade').value;
+  const esc2 = el('fEscola').value;
+
+  let list = JOGOS.filter(j => j.semana === semana);
+  if(cat) list = list.filter(j => j.categoria === cat);
+  if(mod) list = list.filter(j => j.modalidade === mod);
+  if(esc2) list = list.filter(j => j.casa === esc2 || j.fora === esc2);
+
+  if(!list.length){ el('gamesOut').innerHTML = `<div class="empty">Nenhum jogo para esses filtros.</div>`; return; }
+
+  const grupos = {};
+  list.forEach(j => { (grupos[j.categoria] = grupos[j.categoria] || []).push(j); });
+
+  el('gamesOut').innerHTML = CATEGORIAS.filter(c => grupos[c]).map(c => {
+    const jogos = grupos[c];
+    return `<div class="cat-head"><h3>${esc(c)}</h3><span class="count">${jogos.length} jogos · Semana ${semana}</span></div>
+      <div class="sheet">${jogos.map(match).join('')}</div>`;
+  }).join('');
+}
+
+function renderStandings(){
+  const cat = el('cCategoria').value;
+  const mod = el('cModalidade').value;
+  const tabela = computeStandings(JOGOS, cat, mod);
+  const legenda = `Classificação — ${cat || 'todas as categorias'}${mod ? ' · ' + mod : ''}`;
+  el('standingsOut').innerHTML = `<table>
+    <caption>${esc(legenda)}</caption>
+    <thead><tr>
+      <th scope="col">#</th><th scope="col" class="school">Colégio / Time</th>
+      <th scope="col">P</th><th scope="col">J</th><th scope="col">V</th><th scope="col">E</th><th scope="col">D</th><th scope="col">GP</th><th scope="col">GC</th><th scope="col">SG</th>
+    </tr></thead>
+    <tbody>${tabela.map((t, i) => `<tr class="${i === 0 ? 'top1' : ''}">
+      <td class="pos">${i+1}</td>
+      <td class="school">${esc(t.escola)}</td>
+      <td class="pts">${t.P}</td><td>${t.J}</td><td>${t.V}</td><td>${t.E}</td><td>${t.D}</td>
+      <td>${t.GP}</td><td>${t.GC}</td><td>${t.SG > 0 ? '+' + t.SG : t.SG}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function renderTops(){
+  const cat = el('aCategoria').value;
+  const mod = el('aModalidade').value;
+  let list = ARTILHEIROS.slice();
+  if(cat) list = list.filter(a => a.categoria === cat);
+  if(mod) list = list.filter(a => a.modalidade === mod);
+  list.sort((a, b) => b.gols - a.gols);
+  if(!list.length){ el('topsOut').innerHTML = `<div class="empty">Sem artilheiros para esses filtros.</div>`; return; }
+  el('topsOut').innerHTML = `<div class="ranklist">${list.slice(0, 25).map((a, i) => `<div class="rank-row ${i === 0 ? 'first' : ''}">
+    <div class="no">${i+1}</div>
+    <div class="avatar">${initials(a.nome)}</div>
+    <div class="who"><div class="nm">${esc(a.nome)}</div><div class="sub">${esc(a.escola)} · ${esc(a.categoria)}</div></div>
+    <div class="goals">${a.gols}<small>gols</small></div>
+  </div>`).join('')}</div>`;
+}
+
+function renderDestaques(){
+  const champs = computeChampions(JOGOS);
+  const porCat = {};
+  champs.forEach(c => { (porCat[c.categoria] = porCat[c.categoria] || []).push(c); });
+
+  el('champsOut').innerHTML = CATEGORIAS.filter(c => porCat[c]).map(cat => `<div class="champ">
+    <div class="cat">${esc(cat)}</div>
+    <div class="lead">${esc(porCat[cat][0].lider.escola)}</div>
+    <div class="pts">${porCat[cat][0].lider.P} pts · liderança parcial</div>
+    <div class="vice">Vice: ${porCat[cat].map(c => esc(c.vice.escola)).join(' · ')}</div>
+  </div>`).join('');
+
+  el('highOut').innerHTML = DESTAQUES_RODADA.map(d => `<div class="hl">
+    <div class="who">${esc(d.nome)}</div>
+    <div class="cat">${esc(d.categoria)} · ${esc(d.modalidade)}</div>
+    <div class="feito">${esc(d.feito)}</div>
+    <div class="meta"><span>${esc(d.escola)}</span><b>${d.gols} ${d.gols > 1 ? 'gols' : 'gol'}</b></div>
+  </div>`).join('');
+
+  const g = resumo.goleada;
+  el('numsOut').innerHTML = [
+    { n: resumo.escolas, l: 'Colégios e times' },
+    { n: resumo.jogados, l: 'Jogos disputados' },
+    { n: resumo.gols, l: 'Gols na copa' },
+    { n: g ? `${g.golsCasa}–${g.golsFora}` : '—', l: g ? `Maior goleada · ${g.casa} x ${g.fora}` : 'Maior goleada' }
+  ].map((c, i) => `<div class="cell${i===3?' accent':''}"><b>${esc(c.n)}</b><span>${esc(c.l)}</span></div>`).join('');
+}
+
+let semanaBons = ultimaSemanaComDados(loadBons(), SEMANA_ATUAL);
+function renderBons(){
+  const data = loadBons();
+  el('openStory').href = 'story.html?semana=' + semanaBons;
+  el('weekPick').innerHTML = Array.from({length: TOTAL_SEMANAS}, (_, i) => i + 1)
+    .map(s => `<button data-semana="${s}" class="${s === semanaBons ? 'on' : ''}">Semana ${s}</button>`).join('');
+  el('weekPick').querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => { semanaBons = Number(b.dataset.semana); renderBons(); });
+  });
+  const lista = getWeekBons(data, semanaBons);
+  if(!lista.length){
+    el('bonsOut').innerHTML = `<div class="empty" style="grid-column:1/-1">Nenhum atleta na Semana ${semanaBons}. <a class="btn line sm" href="admin.html">Cadastrar no painel</a></div>`;
+    return;
+  }
+  el('bonsOut').innerHTML = lista.map(a => `<div class="bcard">
+    <div class="ph">
+      ${a.foto ? `<img src="${a.foto}" alt="${esc(a.nome)}">` : `<span class="initials">${initials(a.nome)}</span>`}
+      <span class="cat">${esc(a.categoria)}</span>
+      <span class="crown">👑</span>
+    </div>
+    <div class="nm">${esc(a.nome)}</div>
+    <div class="sub">${esc(a.escola)} · ${esc(a.modalidade || '')}${a.posicao ? ' · ' + esc(a.posicao) : ''}</div>
+    <div class="foot"><span>Semana ${semanaBons}</span><span><b>${a.gols || 0}</b> gols</span></div>
+  </div>`).join('');
+}
+
+['fSemana','fCategoria','fModalidade','fEscola'].forEach(id => el(id).addEventListener('change', renderGames));
+['cCategoria','cModalidade'].forEach(id => el(id).addEventListener('change', renderStandings));
+['aCategoria','aModalidade'].forEach(id => el(id).addEventListener('change', renderTops));
+
+renderGames();
+renderStandings();
+renderTops();
+renderDestaques();
+renderBons();
+</script>
+</body>
+</html>
